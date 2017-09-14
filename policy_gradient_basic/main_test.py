@@ -1,4 +1,4 @@
-l'''
+'''
 '''
 
 import numpy as np 
@@ -42,7 +42,7 @@ class linearAgent(Agent):
 
 		for i in range(len(self.states)):
 			
-			deriv = np.hstack((np.vstack((self.states[i], self.states[i])), [[1.],[1.]]))/np.tile(self.actions[i].reshape(len(self.actions[i]),1), len(self.states[i])+1)
+			deriv = np.tile(np.append(self.states[i], 1.), (self.num_action,1) )/np.tile(self.actions[i].reshape(self.num_action,1), self.num_states+1)
 			# deriv = np.hstack((np.vstack((self.states[i], self.states[i])), [[1.],[1.]]))
 			
 			total_return = sum([self.gamma **i * rew for i, rew in enumerate(self.rewards)])
@@ -61,7 +61,7 @@ class linearAgent(Agent):
 
 
 num_episodes = 1000
-env = gym.make('CartPole-v1')
+env = gym.make('MountainCar-v0')
 agent = linearAgent(env)
 
 for ep in range(num_episodes):
@@ -83,8 +83,8 @@ for ep in range(num_episodes):
 		# agent.updatePolicy_online()
 
 		if done:
-			# print("Episode {} finished after {} iterations, with reward {}.".format(ep+1, num_iter, agent.cummulative_reward))
-			print("Episode {} finished after {} iterations".format(ep+1, num_iter))
+			print("Episode {} finished after {} iterations, with reward {}.".format(ep+1, num_iter, agent.cummulative_reward))
+			# print("Episode {} finished after {} iterations.".format(ep+1, num_iter))
 			
 			agent.updatePolicy_episodic()
 			break
