@@ -87,7 +87,22 @@ class gaussianAgent(Agent):
 		self.pp = np.random.randn(2)		# add bias
 
 	def selectAction(self, deterministic=False):
+
+		action = np.exp(-((y - self.pp[0])**2)/(2*self.pp[1]**2)) / (np.sqrt(2*np.pi)*self.pp[1])
+		
 		pass
 
 	def updatePolicy_episodic(self):
+
+		# Calculate characteristic eligibility
+		eligib1 = (y - self.pp[0])/self.pp[1]**2
+		
+		eligib2 = ((y - self.pp[0])**2 - self.pp[1]**2)/self.pp[1]**3
+
+
+		grad_pp = 
+
+
+		self.pp -= self.lr * grad_pp 
+
 		pass
