@@ -3,7 +3,6 @@
 # import numpy as np 
 import signal
 import sys
-import gym
 from gym import envs
 import matplotlib.pyplot as plt
 
@@ -29,16 +28,22 @@ def signal_handler(signal, frame):
 
 signal.signal(signal.SIGINT, signal_handler)
 
-### Environment options
-env = gym.make('CartPole-v0')
+#### Environment options
+## Discreete actions
+# env = gym.make('CartPole-v0')
 # env = gym.make('MountainCar-v0')
 # env = gym.make('LunarLander-v2')
 # env = gym.make('Acrobot-v1')
+## Continuous actions
+env = gym.make('MountainCarContinuous-v0')
 
-agent = softmaxAgent(env, learning_rate=0.001, gamma=0.99, eps=False)
+#### Define agent
+# agent = softmaxAgent(env, learning_rate=0.01, gamma=0.99, eps=False)
+agent = gaussianAgent(env, learning_rate=0.01, gamma=0.99, eps=False)
+# agent = mlpAgent(env, learning_rate=0.01, gamma=0.99, eps=False)
 
 
-num_episodes = 20000
+num_episodes = 10000
 rews = []
 
 for ep in range(num_episodes):
@@ -50,7 +55,9 @@ for ep in range(num_episodes):
 		# env.render()
 		# select action
 		action_prob, action = agent.selectAction()
+		# print(action)
 		# interact with env
+		# agent.state, reward, done, info = env.step(env.action_space.sample())
 		agent.state, reward, done, info = env.step(action)
 		# save trajectory
 		agent.states.append(agent.state)
@@ -61,8 +68,8 @@ for ep in range(num_episodes):
 		# agent.updatePolicy_online()
 
 		if done:
-			if ep%1000 == 0 and ep>1:
-				print("Episode {} finished after {} iterations, with reward {}.".format(ep, num_iter, np.mean(rews)))
+			if ep%100 == 0 and ep>1:
+				print("Episode {} finished after {} iterations, with reward {}.".format(ep, num_iter, round(np.mean(rews), 4)))
 				
 				if agent.eps > 0:
 					print(agent.eps)
