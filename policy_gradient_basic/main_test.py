@@ -30,17 +30,17 @@ signal.signal(signal.SIGINT, signal_handler)
 
 #### Environment options
 ## Discreete actions
-# env = gym.make('CartPole-v0')
+env = gym.make('CartPole-v0')
 # env = gym.make('MountainCar-v0')
 # env = gym.make('LunarLander-v2')
 # env = gym.make('Acrobot-v1')
 ## Continuous actions
-env = gym.make('MountainCarContinuous-v0')
+# env = gym.make('MountainCarContinuous-v0')
 
 #### Define agent
 # agent = softmaxAgent(env, learning_rate=0.01, gamma=0.99, eps=False)
-agent = gaussianAgent(env, learning_rate=0.01, gamma=0.99, eps=False)
-# agent = mlpAgent(env, learning_rate=0.01, gamma=0.99, eps=False)
+# agent = gaussianAgent(env, learning_rate=0.01, gamma=0.99, eps=False)
+agent = mlpAgent(env, learning_rate=0.0001, gamma=0.99, eps=False, num_hidden=100)
 
 
 num_episodes = 10000
@@ -68,9 +68,13 @@ for ep in range(num_episodes):
 		# agent.updatePolicy_online()
 
 		if done:
-			if ep%100 == 0 and ep>1:
+			if ep%1000 == 0 and ep>1:
 				print("Episode {} finished after {} iterations, with reward {}.".format(ep, num_iter, round(np.mean(rews), 4)))
-				
+				print(agent.pp[0].mean(), agent.pp[1].mean(), agent.lr)
+				print('\n')
+				if ep>6000:
+					agent.lr /= 2
+
 				if agent.eps > 0:
 					print(agent.eps)
 					agent.eps *= agent.eps
