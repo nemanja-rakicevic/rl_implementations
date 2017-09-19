@@ -8,8 +8,6 @@ import matplotlib.pyplot as plt
 
 from agent_definitions import *
 
-# def sigmoid(x):
-# 	return 1 / (1 + np.exp(-x))
 
 def printRes():
 	env.reset()
@@ -38,12 +36,12 @@ env = gym.make('CartPole-v0')
 # env = gym.make('MountainCarContinuous-v0')
 
 #### Define agent
-# agent = softmaxAgent(env, learning_rate=0.01, gamma=0.99, eps=False)
+agent = softmaxAgent(env, learning_rate=0.1, gamma=0.99, eps=False)
 # agent = gaussianAgent(env, learning_rate=0.01, gamma=0.99, eps=False)
-agent = mlpAgent(env, learning_rate=0.0001, gamma=0.99, eps=False, num_hidden=100)
+# agent = mlpAgent(env, learning_rate=0.0001, gamma=0.99, eps=False, num_hidden=500)
 
 
-num_episodes = 10000
+num_episodes = 50000
 rews = []
 
 for ep in range(num_episodes):
@@ -72,8 +70,8 @@ for ep in range(num_episodes):
 				print("Episode {} finished after {} iterations, with reward {}.".format(ep, num_iter, round(np.mean(rews), 4)))
 				print(agent.pp[0].mean(), agent.pp[1].mean(), agent.lr)
 				print('\n')
-				if ep>6000:
-					agent.lr /= 2
+				# if ep>6000:
+				# 	agent.lr /= 2
 
 				if agent.eps > 0:
 					print(agent.eps)
